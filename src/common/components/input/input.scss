@@ -1,0 +1,12 @@
+@import "../../../scss/base/mixins";
+.input {
+    padding: rem(10);
+    border-radius: 5px;
+    border: 1px solid #a1a1a1;
+    background: #fefeff;
+    width: 100%;
+    margin-top: rem(4);
+    &::placeholder {
+        color: #b6b6bb;
+    }
+}

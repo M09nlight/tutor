@@ -1,8 +1,8 @@
 import React, { FC, PropsWithChildren } from "react";
 
-interface ContainerProps {}
+interface WrapperProps {}
 
-const Wrapper: FC<PropsWithChildren<ContainerProps>> = ({ children }) => {
+const Wrapper: FC<PropsWithChildren<WrapperProps>> = ({ children }) => {
   return <div className="wrapper">{children}</div>;
 };
 

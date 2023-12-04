@@ -1,9 +1,12 @@
+@use "sass:math";
 //Подключение шрифта
 @mixin font($font_name, $file_name, $weight, $style) {
 	@font-face {
 		font-family: $font_name;
 		font-display: swap;
-		src: url("../fonts/#{$file_name}.woff2") format("woff2"), url("../fonts/#{$file_name}.woff") format("woff");
+		src:
+			url("../fonts/#{$file_name}.woff2") format("woff2"),
+			url("../fonts/#{$file_name}.woff") format("woff");
 		font-weight: #{$weight};
 		font-style: #{$style};
 	}
@@ -53,7 +56,9 @@
 		}
 		// Адаптируем размер в промежутке между указанными ширинами вьюпорта
 		@media (min-width: $widthToMedia) and (max-width: $widthFromMedia) {
-			#{$property}: calc(#{$minSizeValue} + #{$addSize} * (((100vw - #{$widthTo + rem})) / ((#{$widthFrom - $widthTo}))));
+			#{$property}: calc(
+				#{$minSizeValue} + #{$addSize} * (((100vw - #{$widthTo + rem})) / ((#{$widthFrom - $widthTo})))
+			);
 		}
 		// Если конечная ширина равна минимальной ширине
 		// или указана настройка "keepSize" ставим значение
@@ -65,7 +70,9 @@
 		}
 	} @else {
 		// Режим работы по всей ширине вьюпорта
-		#{$property}: calc(#{$minSizeValue} + #{$addSize} * (((100vw - #{$widthTo + rem})) / ((#{$maxWidth - $widthTo}))));
+		#{$property}: calc(
+			#{$minSizeValue} + #{$addSize} * (((100vw - #{$widthTo + rem})) / ((#{$maxWidth - $widthTo})))
+		);
 	}
 }
 //Currency
@@ -80,3 +87,5 @@
 	gap: $gap;
 	grid-template-columns: repeat(auto-#{$type}, minmax($min, $max));
 }
+
+@import "../base";

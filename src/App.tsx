@@ -1,19 +1,21 @@
+import { Route, Routes } from "react-router";
 import "./App.scss";
-import Container from "./common/components/container/Container";
+import Footer from "./common/components/footer/Footer";
 import Header from "./common/components/header/Header";
 import Wrapper from "./common/components/wrapper/Wrapper";
+import LoginPage from "./modules/auth/pages/LoginPage";
+import ProfilePage from "./modules/profile/pages/ProfilePage";
 
 function App() {
   return (
-    <Wrapper>
+    <>
       <Header />
-      <main className="main">
-        <Container>main</Container>
-      </main>
-      <footer className="footer">
-        <Container>footer</Container>
-      </footer>
-    </Wrapper>
+      <Routes>
+        <Route path="sign-in" element={<LoginPage />} />
+        <Route path="*" element={<ProfilePage />} />
+      </Routes>
+      <Footer />
+    </>
   );
 }
 
