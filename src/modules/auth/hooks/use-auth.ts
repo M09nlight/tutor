@@ -1,8 +1,9 @@
 import { useSelector } from "react-redux";
-import { login, selectAuth } from "../service/auth.slice";
+import { login, register, selectAuth } from "../service/auth.slice";
 import { SignInOut } from "../dto/sign-in.out";
 import { useAppActions } from "../../../hooks/appActions";
 import { useAppDispatch } from "../../../store/store";
+import { SingUpOut } from "../dto/sign-up.out";
 
 export const useAuth = () => {
   const { resetFullAccess } = useAppActions();
@@ -11,12 +12,15 @@ export const useAuth = () => {
   const auth = useSelector(selectAuth);
   const isLoggedIn = Boolean(auth.user);
 
-  const signIn = (data: Omit<SignInOut, "device">) => {
-    dispatch(login({ ...data, device: "postman" }));
+  const signIn = async (data: Omit<SignInOut, "device">) => {
+    await dispatch(login({ ...data, device: "postman" }));
+  };
+  const signUp = async (data: Omit<SingUpOut, "device">) => {
+    await dispatch(register({ ...data, device: "postman" }));
   };
 
   const logOut = () => {
     resetFullAccess();
   };
-  return { isLoggedIn, signIn, logOut, auth };
+  return { isLoggedIn, signIn, signUp, logOut, auth };
 };

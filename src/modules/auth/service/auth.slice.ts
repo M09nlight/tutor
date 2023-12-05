@@ -10,13 +10,14 @@ import { SignInOut } from "../dto/sign-in.out";
 import { SingInIn } from "../dto/sing-in.in";
 import storage from "redux-persist/lib/storage";
 import { User } from "../dto/user.in";
+import { JwtPayload, jwtDecode } from "jwt-decode";
+import { SingUpOut } from "../dto/sign-up.out";
+import { SingUpIn } from "../dto/sing-up.in";
 
 const domain: string = "212.193.62.231:8080";
 
 interface AuthState {
   user: User | null;
-  loading: boolean;
-  error: any;
   tokens: SingInIn | null;
   access_token_expired_date: string | null;
   refresh_token_expired_date: string | null;
@@ -24,12 +25,22 @@ interface AuthState {
 
 const initialState: AuthState = {
   user: null,
-  loading: false,
-  error: null,
   tokens: null,
   access_token_expired_date: null,
   refresh_token_expired_date: null,
 };
+function decodeTokens(decodedAT: JwtPayload, decodedRT: JwtPayload) {
+  const timestampAT: number = (decodedAT.exp || 0) * 1000;
+  const timestampRT: number = (decodedRT.exp || 0) * 1000;
+
+  const expirationDateAT = new Date(timestampAT);
+  const expirationDateRT = new Date(timestampRT);
+  const currentDate = new Date();
+
+  const delayAT = expirationDateAT.getTime() - currentDate.getTime();
+  const delayRT = expirationDateRT.getTime() - currentDate.getTime();
+  return { expirationDateAT, expirationDateRT, delayAT, delayRT };
+}
 
 export const login = createAsyncThunk<SingInIn, SignInOut>(
   "auth/signIn",
@@ -37,16 +48,50 @@ export const login = createAsyncThunk<SingInIn, SignInOut>(
     try {
       const response = await axios.post(`http://${domain}/auth/signin`, user);
       const data = (await response.data) as SingInIn;
-      dispatch(getUser(data.access_token));
+      await dispatch(getUser(data.access_token));
 
-      const currentDate = new Date();
+      const decodedAT = jwtDecode(data.access_token);
+      const decodedRT = jwtDecode(data.refresh_token);
 
-      const expirationDateAT = new Date(currentDate.getTime() + 30 * 60000);
-      const delayAT = expirationDateAT.getTime() - currentDate.getTime();
+      const { expirationDateAT, expirationDateRT, delayAT, delayRT } =
+        decodeTokens(decodedAT, decodedRT);
 
-      const expirationDateRT = new Date(currentDate.getTime() + 35 * 60000);
-      const delayRT = expirationDateRT.getTime() - currentDate.getTime();
+      dispatch(
+        authActions.updateExpirationDate({
+          access_token_expired_date: expirationDateAT.toISOString(),
+          refresh_token_expired_date: expirationDateRT.toISOString(),
+        })
+      );
+      setTimeout(() => {
+        dispatch(authActions.resetAccess(expirationDateRT.toISOString()));
+      }, delayAT);
+      setTimeout(() => {
+        console.log("err");
+        dispatch(authActions.resetFullAccess());
+      }, delayRT);
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
+export const register = createAsyncThunk<SingUpIn, SingUpOut>(
+  "auth/signUp",
+  async (user, { rejectWithValue, dispatch }) => {
+    try {
+      const response = await axios.post(
+        `http://${domain}/auth/signup/base`,
+        user
+      );
+      console.log("user", user);
+      const data = (await response.data) as SingUpIn;
+      await dispatch(getUser(data.access_token));
 
+      const decodedAT = jwtDecode(data.access_token);
+      const decodedRT = jwtDecode(data.refresh_token);
+
+      const { expirationDateAT, expirationDateRT, delayAT, delayRT } =
+        decodeTokens(decodedAT, decodedRT);
       dispatch(
         authActions.updateExpirationDate({
           access_token_expired_date: expirationDateAT.toISOString(),
@@ -59,9 +104,10 @@ export const login = createAsyncThunk<SingInIn, SignInOut>(
       setTimeout(() => {
         dispatch(authActions.resetFullAccess());
       }, delayRT);
+
       return data;
-    } catch (error) {
-      return rejectWithValue((error as Error).message);
+    } catch (error: any) {
+      return rejectWithValue(error.response.data.message);
     }
   }
 );
@@ -78,7 +124,7 @@ export const getUser = createAsyncThunk<User, string>(
       const data = (await response.data) as User;
 
       return data;
-    } catch (error) {
+    } catch (error: any) {
       return rejectWithValue((error as Error).message);
     }
   }
@@ -117,21 +163,18 @@ export const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(login.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
       .addCase(
         login.fulfilled,
         (state, action: PayloadAction<SingInIn | null>) => {
           state.tokens = action.payload;
-          state.loading = false;
         }
       )
-      .addCase(getUser.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
+      .addCase(
+        register.fulfilled,
+        (state, action: PayloadAction<SingUpIn | null>) => {
+          state.tokens = action.payload;
+        }
+      )
       .addCase(
         getUser.fulfilled,
         (state, action: PayloadAction<User | null>) => {
@@ -142,20 +185,11 @@ export const authSlice = createSlice({
           state.user = {
             ...action.payload,
           };
-          state.loading = false;
         }
-      )
-      .addMatcher(isError, (state, action: PayloadAction<string>) => {
-        state.error = action.payload;
-        state.loading = false;
-      });
+      );
   },
 });
 export const selectAuth = (state: RootState) => {
   return state.auth;
 };
 export const authActions = authSlice.actions;
-
-function isError(action: Action) {
-  return action.type.endsWith("rejected");
-}

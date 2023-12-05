@@ -46,7 +46,7 @@ body {
 */
 @if ($responsiveType==1) {
 	// Отзывчивая
-	[class*="container"] {
+	[class="container"] {
 		@if ($maxWidthContainer>0) {
 			max-width: rem($maxWidthContainer);
 			box-sizing: content-box;
@@ -58,7 +58,7 @@ body {
 	}
 } @else {
 	// По брейк-поинтам
-	[class*="container"] {
+	[class="container"] {
 		margin: 0 auto;
 		@if ($maxWidthContainer>0) {
 			max-width: rem($maxWidthContainer);

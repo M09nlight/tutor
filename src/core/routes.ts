@@ -2,6 +2,7 @@ import { FC } from "react";
 import ProfilePage from "../modules/profile/pages/ProfilePage";
 import SignInPage from "../modules/auth/pages/SignInPage";
 import MainPage from "../modules/main/pages/MainPage";
+import SignUpPage from "../modules/auth/pages/SignUpPage";
 interface RouteItem {
   path: string;
   Element: FC;
@@ -20,7 +21,7 @@ export const routes: Record<string, RouteItem> = {
   },
   signUp: {
     path: "/sign-up",
-    Element: SignInPage,
+    Element: SignUpPage,
   },
   signIn: {
     path: "/sign-in",

@@ -9,11 +9,15 @@ import { Input } from "../../../common/components/input/Input";
 import Button from "../../../common/components/button/Button";
 import { SignInOut } from "../dto/sign-in.out";
 import { useAuth } from "../hooks/use-auth";
+import { useSelector } from "react-redux";
+import { selectApp } from "../app/service/app.slice";
 
 interface SignInPageProps {}
 
 const SignInPage: FC<SignInPageProps> = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
+  const { error, loading } = useSelector(selectApp);
+
   const { signIn } = useAuth();
   const navigate = useNavigate();
 
@@ -25,10 +29,9 @@ const SignInPage: FC<SignInPageProps> = () => {
   } = useForm<Omit<SignInOut, "device">>({
     mode: "onBlur",
   });
-  const onSubmit = (data: Omit<SignInOut, "device">) => {
-    signIn(data);
+  const onSubmit = async (data: Omit<SignInOut, "device">) => {
+    await signIn(data);
     navigate("/profile");
-    reset();
   };
 
   const updatePasswordVisibility = () => {
@@ -43,12 +46,14 @@ const SignInPage: FC<SignInPageProps> = () => {
             <form onSubmit={handleSubmit(onSubmit)}>
               <h2 className="form__title">Вход</h2>
               <div className="form__element">
-                <label htmlFor="" className="label">
-                  Электронная почта
-                  <div className="form__error">
-                    {errors?.email && (
-                      <p>{errors?.email?.message || "Error"}</p>
-                    )}
+                <label className="label">
+                  <div className="label-top">
+                    Электронная почта
+                    <div className="form__error">
+                      {errors?.email && (
+                        <p>{errors?.email?.message || "Error"}</p>
+                      )}
+                    </div>
                   </div>
                   <Input
                     placeholder="Электронная почта"
@@ -64,12 +69,14 @@ const SignInPage: FC<SignInPageProps> = () => {
                 </label>
               </div>
               <div className="form__element">
-                <label htmlFor="" className="label">
-                  Пароль
-                  <div className="form__error">
-                    {errors?.password && (
-                      <p>{errors?.password?.message || "Error"}</p>
-                    )}
+                <label className="label">
+                  <div className="label-top">
+                    Пароль
+                    <div className="form__error">
+                      {errors?.password && (
+                        <p>{errors?.password?.message || "Error"}</p>
+                      )}
+                    </div>
                   </div>
                   <div className="password-wrapper">
                     <Input
@@ -79,8 +86,8 @@ const SignInPage: FC<SignInPageProps> = () => {
                       {...register("password", {
                         required: "Required field",
                         minLength: {
-                          value: 5,
-                          message: "Minimum is 5 symbols",
+                          value: 8,
+                          message: "Password must be 8 <= 32",
                         },
                       })}
                     />
@@ -94,6 +101,7 @@ const SignInPage: FC<SignInPageProps> = () => {
               <div className="link link--forget">
                 <Link to="/">Забыли пароль?</Link>
               </div>
+
               <Button btnSize="FULL">Войти</Button>
               <div className="no-acc">
                 У вас ещё нет аккаунта?
@@ -116,6 +124,8 @@ const SignInPage: FC<SignInPageProps> = () => {
                   <FaGoogle />
                 </Button>
               </div>
+              <div className="form__error">{error && <p>{error}</p>}</div>
+              <div>{loading && <p>Loading...</p>}</div>
             </div>
           </div>
         </div>

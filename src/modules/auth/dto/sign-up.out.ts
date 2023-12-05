@@ -4,7 +4,7 @@ export interface SingUpOut {
   email: string;
   password: string;
   device: string;
-  user_type: number;
+  user_type: number | string;
   country: number;
   date_of_birthday: string;
 }
