@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import React, { FC, PropsWithChildren } from "react";
+import React, { ComponentProps, FC, PropsWithChildren } from "react";
 
 export enum ButtonBgEnum {
   LIGHT = "LIGHT",
@@ -18,7 +18,8 @@ interface ButtonProps {
   btnBg?: keyof typeof ButtonBgEnum;
   btnSize?: keyof typeof ButtonSizeEnum;
   btnContext?: keyof typeof ButtonContextEnum;
-  disabled?: boolean;
+  disabled?: ComponentProps<"button">["disabled"];
+  onClick?: ComponentProps<"button">["onClick"];
 }
 
 const Button: FC<PropsWithChildren<ButtonProps>> = ({
@@ -26,10 +27,8 @@ const Button: FC<PropsWithChildren<ButtonProps>> = ({
   btnBg = ButtonBgEnum.BLUE,
   btnSize = ButtonSizeEnum.AUTO,
   btnContext = ButtonContextEnum.TEXT,
-  disabled = false,
+  ...buttonProps
 }) => {
-  console.log(btnBg);
-
   const btnClasses = clsx("btn", {
     "btn--bg-blue": btnBg === ButtonBgEnum.BLUE,
     "btn--full": btnSize === ButtonSizeEnum.FULL,
@@ -37,7 +36,7 @@ const Button: FC<PropsWithChildren<ButtonProps>> = ({
     "btn--icon": btnContext === ButtonContextEnum.ICON,
   });
   return (
-    <button className={btnClasses} disabled={disabled}>
+    <button className={btnClasses} {...buttonProps}>
       {children}
     </button>
   );

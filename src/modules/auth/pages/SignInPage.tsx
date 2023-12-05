@@ -1,29 +1,33 @@
-import clsx from "clsx";
-import React, { FC, useState } from "react";
-import { Link, NavLink } from "react-router-dom";
-import "./login-page.scss";
+import { FC, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import "./sign-in-up-page.scss";
 import { FaFacebookF, FaTwitter, FaGoogle } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import Container from "../../../common/components/container/Container";
 import About from "../../../common/components/about/About";
 import { Input } from "../../../common/components/input/Input";
 import Button from "../../../common/components/button/Button";
+import { SignInOut } from "../dto/sign-in.out";
+import { useAuth } from "../hooks/use-auth";
 
-interface LoginProps {}
+interface SignInPageProps {}
 
-const LoginPage: FC<LoginProps> = () => {
+const SignInPage: FC<SignInPageProps> = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
+  const { signIn } = useAuth();
+  const navigate = useNavigate();
 
   const {
     register,
     formState: { errors },
     handleSubmit,
     reset,
-  } = useForm({
+  } = useForm<Omit<SignInOut, "device">>({
     mode: "onBlur",
   });
-  const onSubmit = (data: any) => {
-    alert(JSON.stringify(data));
+  const onSubmit = (data: Omit<SignInOut, "device">) => {
+    signIn(data);
+    navigate("/profile");
     reset();
   };
 
@@ -33,7 +37,7 @@ const LoginPage: FC<LoginProps> = () => {
   return (
     <main className="main">
       <Container>
-        <div className="login">
+        <div className="blocks">
           <About />
           <div className="form">
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -43,7 +47,7 @@ const LoginPage: FC<LoginProps> = () => {
                   Электронная почта
                   <div className="form__error">
                     {errors?.email && (
-                      <p>{(errors?.email?.message as any) || "Error"}</p>
+                      <p>{errors?.email?.message || "Error"}</p>
                     )}
                   </div>
                   <Input
@@ -64,7 +68,7 @@ const LoginPage: FC<LoginProps> = () => {
                   Пароль
                   <div className="form__error">
                     {errors?.password && (
-                      <p>{(errors?.password?.message as any) || "Error"}</p>
+                      <p>{errors?.password?.message || "Error"}</p>
                     )}
                   </div>
                   <div className="password-wrapper">
@@ -120,4 +124,4 @@ const LoginPage: FC<LoginProps> = () => {
   );
 };
 
-export default LoginPage;
+export default SignInPage;

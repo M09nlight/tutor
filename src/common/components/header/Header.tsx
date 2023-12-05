@@ -4,9 +4,11 @@ import { Link, NavLink } from "react-router-dom";
 import Container from "../container/Container";
 import "./header.scss";
 import Button from "../button/Button";
+import { useAuth } from "../../../modules/auth/hooks/use-auth";
 interface HeaderProps {}
 
 const Header: FC<HeaderProps> = () => {
+  const { isLoggedIn, logOut } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const headerClasses = clsx("header", {
@@ -44,16 +46,26 @@ const Header: FC<HeaderProps> = () => {
           <div className="header__right">
             <span className="select-lang">RU</span>
             <div className="auth-btns">
-              <div>
-                <NavLink to="/sign-in">
-                  <Button btnBg={"LIGHT"}>Войти</Button>
-                </NavLink>
-              </div>
-              <div>
-                <NavLink to="/sign-up">
-                  <Button>Зарегистироваться</Button>
-                </NavLink>
-              </div>
+              {!isLoggedIn ? (
+                <>
+                  <div>
+                    <NavLink to="/sign-in">
+                      <Button btnBg={"LIGHT"}>Войти</Button>
+                    </NavLink>
+                  </div>
+                  <div>
+                    <NavLink to="/sign-up">
+                      <Button>Зарегистироваться</Button>
+                    </NavLink>
+                  </div>
+                </>
+              ) : (
+                <div>
+                  <Button btnBg={"LIGHT"} onClick={logOut}>
+                    Выйти
+                  </Button>
+                </div>
+              )}
             </div>
             <button type="button" className="icon-menu" onClick={menuOpen}>
               <span></span>
