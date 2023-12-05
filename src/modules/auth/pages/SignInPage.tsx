@@ -16,10 +16,8 @@ interface SignInPageProps {}
 
 const SignInPage: FC<SignInPageProps> = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
-  const { error, loading } = useSelector(selectApp);
 
-  const { signIn } = useAuth();
-  const navigate = useNavigate();
+  const { signIn, error, loading } = useAuth();
 
   const {
     register,
@@ -29,9 +27,8 @@ const SignInPage: FC<SignInPageProps> = () => {
   } = useForm<Omit<SignInOut, "device">>({
     mode: "onBlur",
   });
-  const onSubmit = async (data: Omit<SignInOut, "device">) => {
-    await signIn(data);
-    navigate("/profile");
+  const onSubmit = (data: Omit<SignInOut, "device">) => {
+    signIn(data);
   };
 
   const updatePasswordVisibility = () => {

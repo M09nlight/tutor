@@ -69,14 +69,13 @@ export const login = createAsyncThunk<SingInIn, SignInOut>(
         dispatch(authActions.resetAccess(expirationDateRT.toISOString()));
       }, delayAT);
       setTimeout(() => {
-        console.log("err");
         dispatch(authActions.resetFullAccess());
       }, delayRT);
-      dispatch(appActions.setLoading(false));
       return data;
     } catch (error: any) {
-      dispatch(appActions.setError(error.response.data.message));
       return rejectWithValue(error.response.data.message);
+    } finally {
+      dispatch(appActions.setLoading(false));
     }
   }
 );
@@ -111,11 +110,11 @@ export const register = createAsyncThunk<SingUpIn, SingUpOut>(
         dispatch(authActions.resetFullAccess());
       }, delayRT);
 
-      dispatch(appActions.setLoading(false));
       return data;
     } catch (error: any) {
-      dispatch(appActions.setError(error.response.data.message));
       return rejectWithValue(error.response.data.message);
+    } finally {
+      dispatch(appActions.setLoading(false));
     }
   }
 );
@@ -132,11 +131,11 @@ export const getUser = createAsyncThunk<User, string>(
       });
       const data = (await response.data) as User;
 
-      dispatch(appActions.setLoading(false));
       return data;
     } catch (error: any) {
-      dispatch(appActions.setError(error.response.data.message));
       return rejectWithValue((error as Error).message);
+    } finally {
+      dispatch(appActions.setLoading(false));
     }
   }
 );

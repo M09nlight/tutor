@@ -25,6 +25,7 @@ export const appSlice = createSlice({
         return;
       }
       state.error = action.payload;
+      return state;
     },
   },
 });

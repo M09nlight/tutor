@@ -24,9 +24,7 @@ const SignUpPage: FC<SignUpPageProps> = () => {
   const [userType, setUserType] = useState<number>(0);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
     useState<boolean>(false);
-  const { error, loading } = useSelector(selectApp);
-  const { signUp } = useAuth();
-  const navigate = useNavigate();
+  const { signUp, loading, error } = useAuth();
 
   const {
     register,
@@ -44,7 +42,6 @@ const SignUpPage: FC<SignUpPageProps> = () => {
   const onSubmit = (data: SignUp) => {
     const { confirm_password, ...restData } = data;
     signUp(restData);
-    // navigate("/profile");
   };
   const handleChangeAgreement = () => {
     setIsAgreement((prev) => !prev);
