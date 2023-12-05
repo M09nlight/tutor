@@ -13,6 +13,8 @@ import { User } from "../dto/user.in";
 import { JwtPayload, jwtDecode } from "jwt-decode";
 import { SingUpOut } from "../dto/sign-up.out";
 import { SingUpIn } from "../dto/sing-up.in";
+import { useAppActions } from "../../../hooks/appActions";
+import { appActions } from "../app/service/app.slice";
 
 const domain: string = "212.193.62.231:8080";
 
@@ -46,6 +48,7 @@ export const login = createAsyncThunk<SingInIn, SignInOut>(
   "auth/signIn",
   async (user, { rejectWithValue, dispatch }) => {
     try {
+      dispatch(appActions.setLoading(true));
       const response = await axios.post(`http://${domain}/auth/signin`, user);
       const data = (await response.data) as SingInIn;
       await dispatch(getUser(data.access_token));
@@ -69,8 +72,10 @@ export const login = createAsyncThunk<SingInIn, SignInOut>(
         console.log("err");
         dispatch(authActions.resetFullAccess());
       }, delayRT);
+      dispatch(appActions.setLoading(false));
       return data;
     } catch (error: any) {
+      dispatch(appActions.setError(error.response.data.message));
       return rejectWithValue(error.response.data.message);
     }
   }
@@ -84,6 +89,7 @@ export const register = createAsyncThunk<SingUpIn, SingUpOut>(
         user
       );
       console.log("user", user);
+      dispatch(appActions.setLoading(true));
       const data = (await response.data) as SingUpIn;
       await dispatch(getUser(data.access_token));
 
@@ -105,8 +111,10 @@ export const register = createAsyncThunk<SingUpIn, SingUpOut>(
         dispatch(authActions.resetFullAccess());
       }, delayRT);
 
+      dispatch(appActions.setLoading(false));
       return data;
     } catch (error: any) {
+      dispatch(appActions.setError(error.response.data.message));
       return rejectWithValue(error.response.data.message);
     }
   }
@@ -116,6 +124,7 @@ export const getUser = createAsyncThunk<User, string>(
   "auth/getUser",
   async (access_token, { rejectWithValue, dispatch }) => {
     try {
+      dispatch(appActions.setLoading(true));
       const response = await axios.get(`http://${domain}/user/profile`, {
         headers: {
           Authorization: `Bearer  ${access_token}`,
@@ -123,8 +132,10 @@ export const getUser = createAsyncThunk<User, string>(
       });
       const data = (await response.data) as User;
 
+      dispatch(appActions.setLoading(false));
       return data;
     } catch (error: any) {
+      dispatch(appActions.setError(error.response.data.message));
       return rejectWithValue((error as Error).message);
     }
   }
