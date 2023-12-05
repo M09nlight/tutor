@@ -29,8 +29,10 @@ const ProfilePage: FC<ProfilePageProps> = ({}) => {
     <main>
       <Container>
         <main className="main">
-          <div>Дата окончания access токена: {formatATED}</div>
-          <div>Дата окончания refresh токена: {formatRTED}</div>
+          <div className="blocks">
+            <div>Дата окончания access токена: {formatATED}</div>
+            <div>Дата окончания refresh токена: {formatRTED}</div>
+          </div>
         </main>
       </Container>
     </main>

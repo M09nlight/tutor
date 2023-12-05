@@ -261,11 +261,12 @@ const SignUpPage: FC<SignUpPageProps> = () => {
                   onChange={handleChangeAgreement}
                 />
                 <div>
-                  Я согласен&nbsp;
+                  Я согласен
                   <Link className="link" to="/">
+                    {" "}
                     с условиями использования
-                  </Link>
-                  &nbsp;и&nbsp;
+                  </Link>{" "}
+                  и{" "}
                   <Link className="link" to="/">
                     политикой конфиденциальности
                   </Link>

@@ -64,6 +64,7 @@
     margin-top: rem(20);
     margin-bottom: rem(20);
     color: #161618;
+    width: 100%;
 }
 .form {
     padding: rem(50);
@@ -71,6 +72,7 @@
     min-height: rem(520);
     width: 100%;
     box-shadow: 3px 12px 24px 0px rgba(129, 137, 197, 0.2);
+    @include adaptiveValue("padding", 50, 5);
     @media (max-width: $mobile) {
         min-width: 0;
         box-shadow: none;

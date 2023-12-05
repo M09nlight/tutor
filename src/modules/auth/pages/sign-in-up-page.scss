@@ -13,6 +13,9 @@
     @media (max-width: $tablet) {
         justify-content: center;
     }
+    &--main {
+        justify-content: center;
+    }
 }
 .label {
     color: #161618;
