@@ -1,22 +1,5 @@
-@import "../../../scss/base/mixins";
-.blocks {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    &--register {
-        align-items: start;
-    }
-    padding: 100px 0 120px 0;
-    @media (max-width: $pc) {
-        column-gap: 30px;
-    }
-    @media (max-width: $tablet) {
-        justify-content: center;
-    }
-    &--main {
-        justify-content: center;
-    }
-}
+@import "../../../../public/scss/base/mixins";
+
 .label {
     color: #161618;
     font-family: Montserrat;

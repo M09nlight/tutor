@@ -1,11 +1,6 @@
-import {
-  Action,
-  PayloadAction,
-  createAsyncThunk,
-  createSlice,
-} from "@reduxjs/toolkit";
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../../store/store";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { SignInOut } from "../dto/sign-in.out";
 import { SingInIn } from "../dto/sing-in.in";
 import storage from "redux-persist/lib/storage";
@@ -13,7 +8,6 @@ import { User } from "../dto/user.in";
 import { JwtPayload, jwtDecode } from "jwt-decode";
 import { SingUpOut } from "../dto/sign-up.out";
 import { SingUpIn } from "../dto/sing-up.in";
-import { useAppActions } from "../../../hooks/appActions";
 import { appActions } from "../app/service/app.slice";
 
 const domain: string = "212.193.62.231:8080";
@@ -31,16 +25,17 @@ const initialState: AuthState = {
   access_token_expired_date: null,
   refresh_token_expired_date: null,
 };
+
 function decodeTokens(decodedAT: JwtPayload, decodedRT: JwtPayload) {
   const timestampAT: number = (decodedAT.exp || 0) * 1000;
   const timestampRT: number = (decodedRT.exp || 0) * 1000;
 
-  const expirationDateAT = new Date(timestampAT);
-  const expirationDateRT = new Date(timestampRT);
+  const expirationDateAT: Date = new Date(timestampAT);
+  const expirationDateRT: Date = new Date(timestampRT);
   const currentDate = new Date();
 
-  const delayAT = expirationDateAT.getTime() - currentDate.getTime();
-  const delayRT = expirationDateRT.getTime() - currentDate.getTime();
+  const delayAT: number = expirationDateAT.getTime() - currentDate.getTime();
+  const delayRT: number = expirationDateRT.getTime() - currentDate.getTime();
   return { expirationDateAT, expirationDateRT, delayAT, delayRT };
 }
 
@@ -49,12 +44,15 @@ export const login = createAsyncThunk<SingInIn, SignInOut>(
   async (user, { rejectWithValue, dispatch }) => {
     try {
       dispatch(appActions.setLoading(true));
-      const response = await axios.post(`http://${domain}/auth/signin`, user);
-      const data = (await response.data) as SingInIn;
+      const response: AxiosResponse = await axios.post(
+        `http://${domain}/auth/signin`,
+        user
+      );
+      const data: SingInIn = await response.data;
       await dispatch(getUser(data.access_token));
 
-      const decodedAT = jwtDecode(data.access_token);
-      const decodedRT = jwtDecode(data.refresh_token);
+      const decodedAT: JwtPayload = jwtDecode(data.access_token);
+      const decodedRT: JwtPayload = jwtDecode(data.refresh_token);
 
       const { expirationDateAT, expirationDateRT, delayAT, delayRT } =
         decodeTokens(decodedAT, decodedRT);
@@ -79,21 +77,21 @@ export const login = createAsyncThunk<SingInIn, SignInOut>(
     }
   }
 );
+
 export const register = createAsyncThunk<SingUpIn, SingUpOut>(
   "auth/signUp",
   async (user, { rejectWithValue, dispatch }) => {
     try {
-      const response = await axios.post(
+      const response: AxiosResponse = await axios.post(
         `http://${domain}/auth/signup/base`,
         user
       );
-      console.log("user", user);
       dispatch(appActions.setLoading(true));
-      const data = (await response.data) as SingUpIn;
+      const data: SingUpIn = await response.data;
       await dispatch(getUser(data.access_token));
 
-      const decodedAT = jwtDecode(data.access_token);
-      const decodedRT = jwtDecode(data.refresh_token);
+      const decodedAT: JwtPayload = jwtDecode(data.access_token);
+      const decodedRT: JwtPayload = jwtDecode(data.refresh_token);
 
       const { expirationDateAT, expirationDateRT, delayAT, delayRT } =
         decodeTokens(decodedAT, decodedRT);
@@ -124,12 +122,15 @@ export const getUser = createAsyncThunk<User, string>(
   async (access_token, { rejectWithValue, dispatch }) => {
     try {
       dispatch(appActions.setLoading(true));
-      const response = await axios.get(`http://${domain}/user/profile`, {
-        headers: {
-          Authorization: `Bearer  ${access_token}`,
-        },
-      });
-      const data = (await response.data) as User;
+      const response: AxiosResponse = await axios.get(
+        `http://${domain}/user/profile`,
+        {
+          headers: {
+            Authorization: `Bearer  ${access_token}`,
+          },
+        }
+      );
+      const data: User = await response.data;
 
       return data;
     } catch (error: any) {

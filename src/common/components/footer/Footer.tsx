@@ -1,5 +1,5 @@
-import React, { FC, useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { FC } from "react";
+import { Link } from "react-router-dom";
 import Container from "../container/Container";
 import "./footer.scss";
 import Toggle from "../toggle/Toggle";
@@ -7,11 +7,6 @@ import Toggle from "../toggle/Toggle";
 interface HeaderProps {}
 
 const Footer: FC<HeaderProps> = () => {
-  const [toggle, setToggle] = useState<object>({
-    toggle1: false,
-    toggle2: false,
-  });
-  const handleToggle = (elem: any) => {};
   return (
     <footer className="footer">
       <Container>

@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import Container from "../../../common/components/container/Container";
 import About from "../../../common/components/about/About";
 

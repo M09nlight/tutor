@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import React, { ComponentProps, FC, PropsWithChildren } from "react";
+import { ComponentProps, FC, PropsWithChildren } from "react";
 
 export enum ButtonBgEnum {
   LIGHT = "LIGHT",

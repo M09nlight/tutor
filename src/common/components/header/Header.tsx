@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import React, { FC, useState } from "react";
+import { FC, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import Container from "../container/Container";
 import "./header.scss";
@@ -9,7 +9,7 @@ interface HeaderProps {}
 
 const Header: FC<HeaderProps> = () => {
   const { isLoggedIn, logOut } = useAuth();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
   const headerClasses = clsx("header", {
     "menu-open": isMenuOpen,

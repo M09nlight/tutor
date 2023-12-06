@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./sign-in-up-page.scss";
 import { FaFacebookF, FaTwitter, FaGoogle } from "react-icons/fa";
 import { useForm } from "react-hook-form";
@@ -9,8 +9,6 @@ import { Input } from "../../../common/components/input/Input";
 import Button from "../../../common/components/button/Button";
 import { SignInOut } from "../dto/sign-in.out";
 import { useAuth } from "../hooks/use-auth";
-import { useSelector } from "react-redux";
-import { selectApp } from "../app/service/app.slice";
 
 interface SignInPageProps {}
 
@@ -23,7 +21,6 @@ const SignInPage: FC<SignInPageProps> = () => {
     register,
     formState: { errors },
     handleSubmit,
-    reset,
   } = useForm<Omit<SignInOut, "device">>({
     mode: "onBlur",
   });
@@ -121,8 +118,10 @@ const SignInPage: FC<SignInPageProps> = () => {
                   <FaGoogle />
                 </Button>
               </div>
-              <div className="form__error">{error && <p>{error}</p>}</div>
-              <div>{loading && <p>Loading...</p>}</div>
+              <div className="app-status">
+                <div className="form__error">{error && <p>{error}</p>}</div>
+                <div>{loading && <p>Loading...</p>}</div>
+              </div>
             </div>
           </div>
         </div>

@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./sign-in-up-page.scss";
 import { useForm } from "react-hook-form";
 import Container from "../../../common/components/container/Container";
@@ -10,8 +10,6 @@ import { SingUpOut } from "../dto/sign-up.out";
 import Select from "react-select";
 import { countries } from "../../../assets/data/countries_RU.data";
 import { useAuth } from "../hooks/use-auth";
-import { useSelector } from "react-redux";
-import { selectApp } from "../app/service/app.slice";
 
 interface SignUp extends Omit<SingUpOut, "device"> {
   confirm_password: string;
@@ -282,8 +280,10 @@ const SignUpPage: FC<SignUpPageProps> = () => {
                 Войти
               </Link>
             </div>
-            <div className="form__error">{error && <p>{error}</p>}</div>
-            <div>{loading && <p>Loading...</p>}</div>
+            <div className="app-status">
+              <div className="form__error">{error && <p>{error}</p>}</div>
+              <div>{loading && <p>Loading...</p>}</div>
+            </div>
           </div>
         </div>
       </Container>
