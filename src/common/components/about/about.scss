@@ -9,7 +9,7 @@
         font-family: Montserrat;
         font-size: rem(28);
         line-height: 1.2;
-        padding-bottom: rem(54);
+        padding-bottom: rem(60);
         &--colorized {
             color: #fefeff;
             background-color: #5e66a7;
@@ -30,10 +30,13 @@
         }
         &--two {
             transform: rotate(2deg);
-            margin: 0px 0px 0px auto;
+            margin: 0px 15px 0px auto;
         }
     }
     &-img {
-        width: 100%;
+        // width: 100%;
+        &-wrapper {
+            margin-top: rem(10);
+        }
     }
 }

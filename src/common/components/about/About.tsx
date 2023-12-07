@@ -16,7 +16,9 @@ const About: FC<aboutProps> = ({}) => {
       <p className="about-desc about-desc--two">
         Выбирайте опытных преподавателей со всего мира
       </p>
-      <img src="img/img-1.png" alt="" className="about-img" />
+      <div className="about-img-wrapper">
+        <img src="img/img-1.png" alt="" className="about-img" />
+      </div>
     </div>
   );
 };

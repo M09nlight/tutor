@@ -105,8 +105,10 @@ const SignInPage: FC<SignInPageProps> = () => {
               </div>
             </form>
             <div className="alternative-login">
-              <div>или</div>
-              <div>Войдите с помощью</div>
+              <div className="alternative-login-desc">
+                <div>или</div>
+                <div>Войдите с помощью</div>
+              </div>
               <div className="alternative-login__icons">
                 <Button btnContext="ICON">
                   <FaFacebookF />

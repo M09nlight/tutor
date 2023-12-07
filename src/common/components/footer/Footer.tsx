@@ -12,8 +12,8 @@ const Footer: FC<HeaderProps> = () => {
       <Container>
         <div className="footer__inner">
           <div className="footer__logo">
-            <Link to="/" className="logo--white">
-              <img src="img/logo-white.svg" alt="" />
+            <Link className="logo-wrapper" to="/">
+              <img className="logo" src="img/logo-white.svg" alt="" />
             </Link>
           </div>
           <div className="footer__links">
@@ -86,15 +86,15 @@ const Footer: FC<HeaderProps> = () => {
                 </li>
               </ul>
             </div>
-            <Link className="footer-bottom-link" to="/">
-              Условия использования
-            </Link>
-            <Link className="footer-bottom-link" to="/">
-              Политика конфиденциальности
-            </Link>
-            <Link className="footer-bottom-link" to="/">
-              © 2021–2022 All rights reserved
-            </Link>
+            <div className="footer-bottom-link">
+              <Link to="/">Условия использования</Link>
+            </div>
+            <div className="footer-bottom-link">
+              <Link to="/">Политика конфиденциальности</Link>
+            </div>
+            <div className="footer-bottom-link">
+              <Link to="/">© 2021–2022 All rights reserved</Link>
+            </div>
           </div>
         </div>
       </Container>

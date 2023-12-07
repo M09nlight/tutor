@@ -64,26 +64,29 @@ const SignUpPage: FC<SignUpPageProps> = () => {
               <h2 className="form__title">Регистрация</h2>
 
               <div className="alternative-register">
-                <label className="alternative-label">
-                  <Input
-                    type="radio"
-                    inputType="RADIO"
-                    value="0"
-                    {...register("user_type")}
-                    onChange={() => updateUserType(0)}
-                  />
-                  Ученик
-                </label>
-                <label className="alternative-label">
-                  <Input
-                    type="radio"
-                    inputType="RADIO"
-                    value="1"
-                    {...register("user_type")}
-                    onChange={() => updateUserType(1)}
-                  />
-                  Преподаватель
-                </label>
+                <div className="alternative-title">Зарегистироваться как</div>
+                <div className="alternative-labels">
+                  <label className="alternative-label">
+                    <Input
+                      type="radio"
+                      inputType="RADIO"
+                      value="0"
+                      {...register("user_type")}
+                      onChange={() => updateUserType(0)}
+                    />
+                    Ученик
+                  </label>
+                  <label className="alternative-label">
+                    <Input
+                      type="radio"
+                      inputType="RADIO"
+                      value="1"
+                      {...register("user_type")}
+                      onChange={() => updateUserType(1)}
+                    />
+                    Преподаватель
+                  </label>
+                </div>
               </div>
               <div className="form__element">
                 <label className="label">
@@ -127,7 +130,9 @@ const SignUpPage: FC<SignUpPageProps> = () => {
                 <label className="label">
                   <div className="label-top">
                     Дата рождения
-                    <span className="label-remarks">(необязательно)</span>
+                    {!!userType && (
+                      <span className="label-remarks">(необязательно)</span>
+                    )}
                     <div className="form__error">
                       {errors?.date_of_birthday && (
                         <p>{errors?.date_of_birthday?.message || "Error"}</p>
@@ -137,7 +142,12 @@ const SignUpPage: FC<SignUpPageProps> = () => {
                   <Input
                     placeholder="Дата рождения"
                     type="text"
-                    {...register("date_of_birthday")}
+                    {...register("date_of_birthday", {
+                      required: {
+                        value: !userType,
+                        message: "Required field",
+                      },
+                    })}
                   />
                 </label>
               </div>
@@ -193,7 +203,7 @@ const SignUpPage: FC<SignUpPageProps> = () => {
               <div className="form__element">
                 <label className="label">
                   <div className="label-top">
-                    Пароль
+                    Придумайте пароль
                     <div className="form__error">
                       {errors?.password && (
                         <p>{errors?.password?.message || "Error"}</p>
@@ -274,9 +284,9 @@ const SignUpPage: FC<SignUpPageProps> = () => {
                 Зарегистрироваться
               </Button>
             </form>
-            <div className="alternative-login">
+            <div className="alternative-login alternative-login--margin">
               <div>У вас уже есть аккаунт?</div>
-              <Link className="link" to="/sign-in">
+              <Link className="link link--fz-main" to="/sign-in">
                 Войти
               </Link>
             </div>

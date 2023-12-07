@@ -23,8 +23,8 @@ const Header: FC<HeaderProps> = () => {
       <Container>
         <div className="header__inner">
           <div className="header__left">
-            <Link className="header-logo" to="/">
-              <img src="img/logo-blue.svg" alt="" />
+            <Link className="logo-wrapper" to="/">
+              <img className="logo" src="img/logo-blue.svg" alt="" />
             </Link>
             <div className="header__menu menu">
               <nav className="menu__body">
@@ -60,7 +60,7 @@ const Header: FC<HeaderProps> = () => {
                   </div>
                 </>
               ) : (
-                <div>
+                <div className="logout">
                   <Button btnBg={"LIGHT"} onClick={logOut}>
                     Выйти
                   </Button>

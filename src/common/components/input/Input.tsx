@@ -23,8 +23,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ inputType, ...inputProps }, ref) => {
     const inputClasses = clsx("input", {
       "input--password": inputType === InputType.PASSWORD,
-      "input--checkbox":
-        inputType === InputType.CHECKBOX || inputType === InputType.RADIO,
+      "input--checkbox": inputType === InputType.CHECKBOX,
+      "input--radio": inputType === InputType.RADIO,
     });
     return <input ref={ref} {...inputProps} className={inputClasses} />;
   }

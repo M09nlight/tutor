@@ -9,9 +9,16 @@
         color: #b6b6bb;
     }
     &--checkbox {
-        width: 20px;
-        height: 20px;
+        width: 25px;
+        height: 25px;
+        margin-left: 4px;
+        margin-right: 2px;
+    }
+    &--radio {
+        width: 16px;
+        height: 16px;
         margin-top: 0;
         margin-right: 2px;
+        accent-color: #5e66a7;
     }
 }
